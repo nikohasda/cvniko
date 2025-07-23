@@ -39,12 +39,7 @@
             }
         }
 
-        .slide-up {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: slideUp 0.8s ease-out forwards;
-        }
-
+        /* The slide-up animation is now applied dynamically via JS and section-visible */
         @keyframes slideUp {
             to {
                 opacity: 1;
@@ -66,6 +61,166 @@
         html {
             scroll-behavior: smooth;
         }
+
+        /* Burger icon animation styles */
+        .burger-icon span {
+            display: block;
+            width: 32px;
+            height: 4px;
+            background-color: white;
+            border-radius: 2px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .burger-icon span:nth-child(2) {
+            margin: 6px 0;
+        }
+
+        .burger-icon.open span:nth-child(1) {
+            transform: translateY(10px) rotate(45deg);
+        }
+
+        .burger-icon.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-icon.open span:nth-child(3) {
+            transform: translateY(-10px) rotate(-45deg);
+        }
+
+        /* Style for SVG icons within menu items */
+        .menu-icon {
+            fill: currentColor; /* Inherit color from parent (white) */
+            width: 24px; /* Adjust size as needed */
+            height: 24px; /* Adjust size as needed */
+            margin-bottom: 4px; /* Space between icon and text for mobile vertical layout */
+        }
+
+        /* Adjust icon margin for desktop horizontal layout */
+        .desktop-menu-item .menu-icon {
+            margin-bottom: 0; /* Remove bottom margin */
+            margin-right: 8px; /* Add right margin for horizontal spacing */
+        }
+
+        /* Style for the custom message box */
+        .message-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #333;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .message-box.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Business card specific styles */
+        .business-card {
+            background-color: #ffffff;
+            border-radius: 1rem; /* rounded-xl */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* shadow-lg */
+            padding: 2.5rem; /* p-10 */
+            max-width: 48rem; /* max-w-2xl */
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            display: flex; /* Use flexbox for internal layout */
+            flex-direction: column; /* Stack content vertically by default */
+            align-items: center; /* Center items horizontally */
+            gap: 1.5rem; /* Space between sections */
+        }
+
+        @media (min-width: 768px) { /* md breakpoint */
+            .business-card {
+                flex-direction: row; /* Arrange content horizontally on desktop */
+                text-align: left; /* Align text to left on desktop */
+                justify-content: center; /* Center content horizontally */
+                padding: 2rem 3rem; /* Adjust padding for desktop */
+            }
+        }
+
+        .business-card-profile-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%; /* Make it circular */
+            object-fit: cover;
+            border: 4px solid #3b82f6; /* Blue border */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (min-width: 768px) {
+            .business-card-profile-photo {
+                margin-right: 2rem; /* Add space to the right of photo on desktop */
+            }
+        }
+
+        .business-card-info {
+            flex-grow: 1; /* Allow info section to take available space */
+        }
+
+        .business-card-contact-details {
+            display: flex;
+            flex-direction: column; /* Stack contact items vertically by default */
+            gap: 0.75rem; /* Space between contact items */
+            margin-top: 1.5rem; /* Space below name/title */
+        }
+
+        @media (min-width: 768px) {
+            .business-card-contact-details {
+                flex-direction: row; /* Arrange contact items horizontally on desktop */
+                flex-wrap: wrap; /* Allow wrapping if items are too wide */
+                justify-content: flex-start; /* Align items to start on desktop */
+                margin-top: 0; /* Remove top margin if photo is next to it */
+            }
+        }
+
+        .business-card-item {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center content in item for mobile */
+            padding: 0.75rem 1.25rem; /* py-3 px-5 */
+            border-radius: 0.5rem; /* rounded-lg */
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 600; /* font-semibold */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow-md */
+            transition: all 0.3s ease-in-out;
+            width: 100%; /* Full width for mobile */
+        }
+
+        @media (min-width: 768px) {
+            .business-card-item {
+                width: auto; /* Auto width for desktop */
+                justify-content: flex-start; /* Align content to start in item for desktop */
+            }
+        }
+
+        .business-card-icon {
+            fill: currentColor;
+            width: 24px; /* Slightly smaller icon for better integration */
+            height: 24px;
+            margin-right: 10px; /* Space between icon and text */
+        }
+
+        /* New styles for desktop menu slide-in animation */
+        .desktop-menu-item.slide-in-left-hidden {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .desktop-menu-item.slide-in-left-visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -75,39 +230,53 @@
         <nav class="container mx-auto flex justify-between items-center">
             <a href="#" class="text-3xl font-bold tracking-tight">Niko Hasda Prayogo</a>
             <!-- Desktop Navigation - Hidden on small screens -->
-            <ul class="hidden md:flex space-x-8">
-                <li><a href="#hero" class="text-lg hover:text-blue-200 transition duration-300">Beranda</a></li>
-                <li><a href="#about" class="text-lg hover:text-blue-200 transition duration-300">Tentang</a></li>
-                <li><a href="#services" class="text-lg hover:text-blue-200 transition duration-300">Layanan</a></li>
-                <li><a href="#portfolio" class="text-lg hover:text-blue-200 transition duration-300">Portofolio</a></li>
-                <li><a href="#contact" class="text-lg hover:text-blue-200 transition duration-300">Kontak</a></li>
+            <ul id="desktop-nav-menu" class="hidden md:flex space-x-8">
+                <li><a href="#hero" class="desktop-menu-item text-lg hover:text-blue-200 flex items-center slide-in-left-hidden">
+                    <svg class="menu-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg> Beranda
+                </a></li>
+                <li><a href="#about" class="desktop-menu-item text-lg hover:text-blue-200 flex items-center slide-in-left-hidden">
+                    <svg class="menu-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg> Tentang
+                </a></li>
+                <li><a href="#services" class="desktop-menu-item text-lg hover:text-blue-200 flex items-center slide-in-left-hidden">
+                    <svg class="menu-icon" viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.09-.75-1.7-.92L14.8 2.5c-.06-.2-.25-.35-.47-.35h-4c-.22 0-.41.15-.47.35L9.25 5.11c-.61.17-1.18.52-1.7.92l-2.49-1c-.22-.08-.49 0-.61.22l-2 3.46c-.12.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.09.75 1.7.92L9.1 21.5c.06.2.25.35.47.35h4c.22 0 .41-.15.47-.35l.95-2.79c.61-.17 1.18-.52 1.7-.92l2.49 1c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg> Layanan
+                </a></li>
+                <li><a href="#portfolio" class="desktop-menu-item text-lg hover:text-blue-200 flex items-center slide-in-left-hidden">
+                    <svg class="menu-icon" viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg> Portofolio
+                </a></li>
+                <li><a href="#contact" class="desktop-menu-item text-lg hover:text-blue-200 flex items-center slide-in-left-hidden">
+                    <svg class="menu-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg> Kontak
+                </a></li>
             </ul>
 
             <!-- Mobile Menu Button (Hamburger Icon) - Visible on small screens -->
             <!-- Positioned at bottom-right for thumb accessibility -->
             <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none fixed bottom-4 right-4 z-[100] bg-blue-600 p-3 rounded-full shadow-lg hover-shadow transition duration-300 ease-in-out transform hover-scale">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                </svg>
+                <div class="burger-icon flex flex-col justify-center items-center">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </button>
 
             <!-- Mobile Menu Overlay -->
             <!-- Slides up from bottom, 30% height, full width -->
             <div id="mobile-menu" class="fixed bottom-0 left-0 w-full h-[30vh] bg-gradient-to-r from-blue-600 to-indigo-700 z-[90] transform translate-y-full transition-transform duration-300 ease-in-out md:hidden">
-                <div class="flex justify-end p-6">
-                    <button id="close-mobile-menu" class="text-white focus:outline-none">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-                <!-- Changed to grid layout with 3 columns and adjusted spacing for square-like buttons -->
-                <ul class="grid grid-cols-3 gap-3 h-full px-4 content-center">
-                    <li><a href="#hero" class="block w-full text-center py-4 rounded-lg text-white hover:bg-blue-500 transition duration-300 text-base" data-close-menu>Beranda</a></li>
-                    <li><a href="#about" class="block w-full text-center py-4 rounded-lg text-white hover:bg-blue-500 transition duration-300 text-base" data-close-menu>Tentang</a></li>
-                    <li><a href="#services" class="block w-full text-center py-4 rounded-lg text-white hover:bg-blue-500 transition duration-300 text-base" data-close-menu>Layanan</a></li>
-                    <li><a href="#portfolio" class="block w-full text-center py-4 rounded-lg text-white hover:bg-blue-500 transition duration-300 text-base" data-close-menu>Portofolio</a></li>
-                    <li><a href="#contact" class="block w-full text-center py-4 rounded-lg text-white hover:bg-blue-500 transition duration-300 text-base" data-close-menu>Kontak</a></li>
+                <ul id="mobile-nav-menu" class="grid grid-cols-3 gap-3 h-full px-4 content-center">
+                    <li><a href="#hero" class="block w-full text-center py-4 rounded-lg text-white hover:bg-blue-500 transition duration-300 text-base flex flex-col items-center justify-center section-hidden" data-close-menu>
+                        <svg class="menu-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg> Beranda
+                    </a></li>
+                    <li><a href="#about" class="block w-full text-center py-4 rounded-lg text-white hover:bg-blue-500 transition duration-300 text-base flex flex-col items-center justify-center section-hidden" data-close-menu>
+                        <svg class="menu-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg> Tentang
+                    </a></li>
+                    <li><a href="#services" class="block w-full text-center py-4 rounded-lg text-white hover:bg-blue-500 transition duration-300 text-base flex flex-col items-center justify-center section-hidden" data-close-menu>
+                        <svg class="menu-icon" viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.09-.75-1.7-.92L14.8 2.5c-.06-.2-.25-.35-.47-.35h-4c-.22 0-.41.15-.47.35L9.25 5.11c-.61.17-1.18.52-1.7.92l-2.49-1c-.22-.08-.49 0-.61.22l-2 3.46c-.12.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.09.75 1.7.92L9.1 21.5c.06.2.25.35.47.35h4c.22 0 .41-.15.47-.35l.95-2.79c.61-.17 1.18-.52 1.7-.92l2.49 1c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg> Layanan
+                    </a></li>
+                    <li><a href="#portfolio" class="block w-full text-center py-4 rounded-lg text-white hover:bg-blue-500 transition duration-300 text-base flex flex-col items-center justify-center section-hidden" data-close-menu style="animation-delay: 0.4s;">
+                        <svg class="menu-icon" viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg> Portofolio
+                    </a></li>
+                    <li><a href="#contact" class="block w-full text-center py-4 rounded-lg text-white hover:bg-blue-500 transition duration-300 text-base flex flex-col items-center justify-center section-hidden" data-close-menu style="animation-delay: 0.5s;">
+                        <svg class="menu-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg> Kontak
+                    </a></li>
                 </ul>
             </div>
         </nav>
@@ -115,8 +284,7 @@
 
     <main>
         <!-- Hero Section -->
-        <section id="hero" class="relative h-screen flex items-center justify-center bg-cover bg-center text-white"
-            style="background-image: url('https://placehold.co/1920x1080/4a5568/ffffff?text=Latar+Belakang+Desain+Grafis');">
+        <section id="hero" class="relative h-screen flex items-center justify-center bg-cover bg-center text-white">
             <div class="absolute inset-0 bg-black opacity-60"></div>
             <div class="z-10 text-center p-8 rounded-xl bg-white bg-opacity-10 backdrop-blur-sm shadow-2xl fade-in">
                 <h1 class="text-6xl font-extrabold mb-4 leading-tight drop-shadow-lg">Halo, Saya Niko Hasda Prayogo</h1>
@@ -128,14 +296,14 @@
         </section>
 
         <!-- About Section -->
-        <section id="about" class="py-20 bg-white section-hidden">
+        <section id="about" class="py-20 bg-white">
             <div class="container mx-auto px-6 lg:px-8">
-                <h2 class="text-5xl font-bold text-center mb-12 text-gray-800 slide-up">Tentang Saya</h2>
+                <h2 class="text-5xl font-bold text-center mb-12 text-gray-800 section-hidden" style="animation-delay: 0s;">Tentang Saya</h2>
                 <div class="flex flex-col lg:flex-row items-center lg:space-x-12">
-                    <div class="lg:w-1/3 mb-8 lg:mb-0 slide-up">
+                    <div class="lg:w-1/3 mb-8 lg:mb-0 section-hidden" style="animation-delay: 0.1s;">
                         <img src="https://placehold.co/400x400/a0aec0/ffffff?text=Foto+Niko" alt="Foto Niko Hasda Prayogo" class="rounded-full shadow-xl mx-auto border-4 border-blue-500 hover-scale">
                     </div>
-                    <div class="lg:w-2/3 text-lg leading-relaxed text-gray-700 slide-up">
+                    <div class="lg:w-2/3 text-lg leading-relaxed text-gray-700 section-hidden" style="animation-delay: 0.2s;">
                         <p class="mb-6">
                             Saya Niko Hasda Prayogo, seorang desainer grafis yang bersemangat dengan pengalaman lebih dari 5 tahun dalam menciptakan visual yang menawan dan efektif. Saya percaya bahwa desain bukan hanya tentang estetika, tetapi juga tentang komunikasi yang kuat dan solusi visual yang cerdas.
                         </p>
@@ -151,31 +319,31 @@
         </section>
 
         <!-- Services Section -->
-        <section id="services" class="py-20 bg-gray-100 section-hidden">
+        <section id="services" class="py-20 bg-gray-100">
             <div class="container mx-auto px-6 lg:px-8">
-                <h2 class="text-5xl font-bold text-center mb-12 text-gray-800 slide-up">Layanan Saya</h2>
+                <h2 class="text-5xl font-bold text-center mb-12 text-gray-800 section-hidden" style="animation-delay: 0s;">Layanan Saya</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                    <div class="bg-white p-8 rounded-xl shadow-lg text-center hover-shadow hover-scale transition duration-300 slide-up">
+                    <div class="bg-white p-8 rounded-xl shadow-lg text-center hover-shadow hover-scale transition duration-300 section-hidden" style="animation-delay: 0.1s;">
                         <div class="text-blue-600 text-6xl mb-4">🎨</div> <!-- Emoji icon for design -->
                         <h3 class="text-2xl font-semibold mb-4 text-gray-800">Desain Poster</h3>
                         <p class="text-gray-600">Menciptakan poster yang menarik perhatian dan menyampaikan pesan dengan jelas untuk berbagai acara dan promosi.</p>
                     </div>
-                    <div class="bg-white p-8 rounded-xl shadow-lg text-center hover-shadow hover-scale transition duration-300 slide-up" style="animation-delay: 0.1s;">
+                    <div class="bg-white p-8 rounded-xl shadow-lg text-center hover-shadow hover-scale transition duration-300 section-hidden" style="animation-delay: 0.2s;">
                         <div class="text-green-600 text-6xl mb-4">🖼️</div> <!-- Emoji icon for banner -->
                         <h3 class="text-2xl font-semibold mb-4 text-gray-800">Desain Banner & Baliho</h3>
                         <p class="text-gray-600">Merancang banner dan baliho yang impactful untuk kampanye pemasaran outdoor dan digital.</p>
                     </div>
-                    <div class="bg-white p-8 rounded-xl shadow-lg text-center hover-shadow hover-scale transition duration-300 slide-up" style="animation-delay: 0.2s;">
+                    <div class="bg-white p-8 rounded-xl shadow-lg text-center hover-shadow hover-scale transition duration-300 section-hidden" style="animation-delay: 0.3s;">
                         <div class="text-yellow-600 text-6xl mb-4">🏅</div> <!-- Emoji icon for certificate -->
                         <h3 class="text-2xl font-semibold mb-4 text-gray-800">Desain Sertifikat</h3>
                         <p class="text-gray-600">Membuat desain sertifikat yang elegan dan profesional untuk penghargaan atau kelulusan.</p>
                     </div>
-                    <div class="bg-white p-8 rounded-xl shadow-lg text-center hover-shadow hover-scale transition duration-300 slide-up" style="animation-delay: 0.3s;">
+                    <div class="bg-white p-8 rounded-xl shadow-lg text-center hover-shadow hover-scale transition duration-300 section-hidden" style="animation-delay: 0.4s;">
                         <div class="text-purple-600 text-6xl mb-4">🌐</div> <!-- Emoji icon for virtual background -->
                         <h3 class="text-2xl font-semibold mb-4 text-gray-800">Desain Virtual Background</h3>
                         <p class="text-gray-600">Menyediakan virtual background yang kreatif dan berkualitas tinggi untuk rapat online atau acara virtual.</p>
                     </div>
-                    <div class="bg-white p-8 rounded-xl shadow-lg text-center hover-shadow hover-scale transition duration-300 slide-up" style="animation-delay: 0.4s;">
+                    <div class="bg-white p-8 rounded-xl shadow-lg text-center hover-shadow hover-scale transition duration-300 section-hidden" style="animation-delay: 0.5s;">
                         <div class="text-red-600 text-6xl mb-4">💡</div> <!-- Emoji icon for general design -->
                         <h3 class="text-2xl font-semibold mb-4 text-gray-800">Desain Grafis Umum</h3>
                         <p class="text-gray-600">Layanan desain grafis lainnya sesuai kebutuhan Anda, dari logo hingga ilustrasi.</p>
@@ -185,12 +353,12 @@
         </section>
 
         <!-- Portfolio Section -->
-        <section id="portfolio" class="py-20 bg-white section-hidden">
+        <section id="portfolio" class="py-20 bg-white">
             <div class="container mx-auto px-6 lg:px-8">
-                <h2 class="text-5xl font-bold text-center mb-12 text-gray-800 slide-up">Portofolio Saya</h2>
+                <h2 class="text-5xl font-bold text-center mb-12 text-gray-800 section-hidden" style="animation-delay: 0s;">Portofolio Saya</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                     <!-- Portfolio Item 1 -->
-                    <div class="bg-gray-100 rounded-xl shadow-lg overflow-hidden hover-shadow hover-scale transition duration-300 slide-up">
+                    <div class="bg-gray-100 rounded-xl shadow-lg overflow-hidden hover-shadow hover-scale transition duration-300 section-hidden" style="animation-delay: 0.1s;">
                         <img src="https://placehold.co/600x400/667eea/ffffff?text=Desain+Poster+Acara" alt="Desain Poster Acara" class="w-full h-64 object-cover">
                         <div class="p-6">
                             <h3 class="text-2xl font-semibold mb-2 text-gray-800">Desain Poster Acara Musik</h3>
@@ -198,7 +366,7 @@
                         </div>
                     </div>
                     <!-- Portfolio Item 2 -->
-                    <div class="bg-gray-100 rounded-xl shadow-lg overflow-hidden hover-shadow hover-scale transition duration-300 slide-up" style="animation-delay: 0.1s;">
+                    <div class="bg-gray-100 rounded-xl shadow-lg overflow-hidden hover-shadow hover-scale transition duration-300 section-hidden" style="animation-delay: 0.2s;">
                         <img src="https://placehold.co/600x400/4299e1/ffffff?text=Desain+Banner+Promosi" alt="Desain Banner Promosi" class="w-full h-64 object-cover">
                         <div class="p-6">
                             <h3 class="text-2xl font-semibold mb-2 text-gray-800">Desain Banner Promosi Produk</h3>
@@ -206,7 +374,7 @@
                         </div>
                     </div>
                     <!-- Portfolio Item 3 -->
-                    <div class="bg-gray-100 rounded-xl shadow-lg overflow-hidden hover-shadow hover-scale transition duration-300 slide-up" style="animation-delay: 0.2s;">
+                    <div class="bg-gray-100 rounded-xl shadow-lg overflow-hidden hover-shadow hover-scale transition duration-300 section-hidden" style="animation-delay: 0.3s;">
                         <img src="https://placehold.co/600x400/805ad5/ffffff?text=Desain+Sertifikat+Webinar" alt="Desain Sertifikat Webinar" class="w-full h-64 object-cover">
                         <div class="p-6">
                             <h3 class="text-2xl font-semibold mb-2 text-gray-800">Desain Sertifikat Webinar</h3>
@@ -214,7 +382,7 @@
                         </div>
                     </div>
                     <!-- Portfolio Item 4 -->
-                    <div class="bg-gray-100 rounded-xl shadow-lg overflow-hidden hover-shadow hover-scale transition duration-300 slide-up" style="animation-delay: 0.3s;">
+                    <div class="bg-gray-100 rounded-xl shadow-lg overflow-hidden hover-shadow hover-scale transition duration-300 section-hidden" style="animation-delay: 0.4s;">
                         <img src="https://placehold.co/600x400/38b2ac/ffffff?text=Virtual+Background+Perusahaan" alt="Virtual Background Perusahaan" class="w-full h-64 object-cover">
                         <div class="p-6">
                             <h3 class="text-2xl font-semibold mb-2 text-gray-800">Virtual Background Perusahaan</h3>
@@ -222,7 +390,7 @@
                         </div>
                     </div>
                     <!-- Portfolio Item 5 -->
-                    <div class="bg-gray-100 rounded-xl shadow-lg overflow-hidden hover-shadow hover-scale transition duration-300 slide-up" style="animation-delay: 0.4s;">
+                    <div class="bg-gray-100 rounded-xl shadow-lg overflow-hidden hover-shadow hover-scale transition duration-300 section-hidden" style="animation-delay: 0.5s;">
                         <img src="https://placehold.co/600x400/ed8936/ffffff?text=Desain+Baliho+Event" alt="Desain Baliho Event" class="w-full h-64 object-cover">
                         <div class="p-6">
                             <h3 class="text-2xl font-semibold mb-2 text-gray-800">Desain Baliho Event Besar</h3>
@@ -230,8 +398,7 @@
                         </div>
                     </div>
                     <!-- Portfolio Item 6 -->
-                    <div class="bg-gray-100 rounded-xl shadow-lg overflow-hidden hover-shadow hover-scale transition duration-300 slide-up" style="animation-delay: 0.5s;">
-                        <img src="https://placehold.co/600x400/ecc94b/ffffff?text=Desain+Logo+Startup" alt="Desain Logo Startup" class="w-full h-64 object-cover">
+                    <div class="bg-gray-100 rounded-xl shadow-lg overflow-hidden hover-shadow hover-scale transition duration-300 section-hidden" style="animation-delay: 0.6s;">
                         <div class="p-6">
                             <h3 class="text-2xl font-semibold mb-2 text-gray-800">Desain Logo Startup Baru</h3>
                             <p class="text-gray-600">Pengembangan logo modern dan minimalis untuk startup teknologi.</p>
@@ -242,37 +409,48 @@
         </section>
 
         <!-- Contact Section -->
-        <section id="contact" class="py-20 bg-gray-100 section-hidden">
+        <section id="contact" class="py-20 bg-gray-100">
             <div class="container mx-auto px-6 lg:px-8">
-                <h2 class="text-5xl font-bold text-center mb-12 text-gray-800 slide-up">Hubungi Saya</h2>
-                <div class="max-w-3xl mx-auto bg-white p-10 rounded-xl shadow-lg hover-shadow transition duration-300 slide-up">
-                    <p class="text-center text-lg mb-8 text-gray-700">Tertarik untuk berkolaborasi atau memiliki pertanyaan? Jangan ragu untuk menghubungi saya!</p>
-                    <form class="space-y-6">
-                        <div>
-                            <label for="name" class="block text-lg font-medium text-gray-700 mb-2">Nama Lengkap</label>
-                            <input type="text" id="name" name="name" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-300" placeholder="Nama Anda">
+                <h2 class="text-5xl font-bold text-center mb-12 text-gray-800 section-hidden" style="animation-delay: 0s;">Hubungi Saya</h2>
+                <div class="business-card section-hidden hover-shadow transition duration-300" style="animation-delay: 0.1s;">
+                    <img src="https://placehold.co/120x120/a0aec0/ffffff?text=Niko" alt="Foto Profil Niko Hasda Prayogo" class="business-card-profile-photo section-hidden" style="animation-delay: 0.2s;">
+                    <div class="business-card-info">
+                        <h3 class="text-4xl font-bold text-gray-900 mb-2 section-hidden" style="animation-delay: 0.3s;">Niko Hasda Prayogo</h3>
+                        <p class="text-xl text-gray-600 mb-8 section-hidden" style="animation-delay: 0.4s;">Desainer Grafis Profesional</p>
+
+                        <div class="business-card-contact-details">
+                            <!-- WhatsApp Button -->
+                            <a href="https://wa.me/6281234567890" target="_blank" class="business-card-item bg-green-500 hover:bg-green-600 text-white section-hidden" style="animation-delay: 0.5s;">
+                                <svg class="business-card-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M.99 21.01l1.55-5.67A10.02 10.02 0 0112 2C17.52 2 22 6.48 22 12s-4.48 10-10 10c-1.97 0-3.8-.58-5.38-1.57l-5.63 1.58zM12 4c-4.41 0-8 3.59-8 8s3.59 8 8 8c1.7 0 3.27-.53 4.58-1.44L18 20.01l-1.5-4.5c.9-1.31 1.42-2.88 1.42-4.51C17.92 6.48 14.41 4 12 4zm-1 10.5h2V12h-2v2.5zm0-4h2V7h-2v3.5z"/>
+                                </svg>
+                                WhatsApp
+                            </a>
+
+                            <!-- Email with Copy Button -->
+                            <div class="business-card-item bg-blue-500 hover:bg-blue-600 text-white cursor-pointer section-hidden" id="email-contact-item" style="animation-delay: 0.6s;">
+                                <svg class="business-card-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                                </svg>
+                                <span id="email-address">niko.hasda@example.com</span>
+                                <button id="copy-email-button" class="ml-3 bg-blue-700 hover:bg-blue-800 text-white font-bold py-1 px-2 rounded-md text-sm">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
-                        <div>
-                            <label for="email" class="block text-lg font-medium text-gray-700 mb-2">Email</label>
-                            <input type="email" id="email" name="email" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-300" placeholder="Email Anda">
-                        </div>
-                        <div>
-                            <label for="message" class="block text-lg font-medium text-gray-700 mb-2">Pesan</label>
-                            <textarea id="message" name="message" rows="6" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-300" placeholder="Tulis pesan Anda di sini..."></textarea>
-                        </div>
-                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-lg text-xl shadow-md hover-shadow transition duration-300 ease-in-out transform hover-scale">
-                            Kirim Pesan
-                        </button>
-                    </form>
-                    <div class="text-center mt-8 text-gray-600">
-                        <p>Atau hubungi saya melalui:</p>
-                        <p class="text-xl font-semibold mt-2">Email: niko.hasda@example.com</p>
-                        <p class="text-xl font-semibold">Telepon: +62 812-3456-7890</p>
+                        <p class="text-xl font-semibold text-gray-800 mt-4 md:mt-0 section-hidden" style="animation-delay: 0.7s;">Telepon: +62 812-3456-7890</p>
                     </div>
                 </div>
             </div>
         </section>
     </main>
+
+    <!-- Custom Message Box for Copy Confirmation -->
+    <div id="message-box" class="message-box">
+        Teks berhasil disalin!
+    </div>
 
     <!-- Footer Section -->
     <footer class="bg-gray-800 text-white py-8 text-center">
@@ -295,7 +473,8 @@
         });
 
         // JavaScript for scroll-based animations (fade-in and slide-up)
-        const sections = document.querySelectorAll('.section-hidden');
+        // This observer now targets ALL elements with 'section-hidden' class
+        const sectionsToAnimate = document.querySelectorAll('.section-hidden');
 
         const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
@@ -307,51 +486,112 @@
                 }
             });
         }, {
-            threshold: 0.1, // Trigger when 10% of the section is visible
+            threshold: 0.1, // Trigger when 10% of the element is visible
             rootMargin: '0px 0px -50px 0px' // Adjust margin to trigger slightly earlier
         });
 
-        sections.forEach(section => {
-            observer.observe(section);
+        sectionsToAnimate.forEach(element => {
+            observer.observe(element);
         });
 
         // Initial animation for hero section elements
         document.addEventListener('DOMContentLoaded', () => {
             const heroContent = document.querySelector('#hero > div');
             heroContent.classList.add('fade-in'); // Apply fade-in to the hero content
+
+            // Animate desktop menu items on load
+            const desktopMenuItems = document.querySelectorAll('#desktop-nav-menu .desktop-menu-item');
+            desktopMenuItems.forEach((item, index) => {
+                // Ensure they are hidden first if not already
+                item.classList.add('slide-in-left-hidden');
+                item.style.animationDelay = `${0.15 * index}s`; // Increased staggered delay
+                // Trigger animation after a short delay
+                setTimeout(() => {
+                    item.classList.add('slide-in-left-visible');
+                }, 100); // Small initial delay to ensure CSS is applied
+            });
         });
 
         // JavaScript for burger menu functionality
         const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const closeMobileMenuButton = document.getElementById('close-mobile-menu');
         const mobileMenu = document.getElementById('mobile-menu');
-        const mobileMenuLinks = mobileMenu.querySelectorAll('a[data-close-menu]');
+        const burgerIcon = mobileMenuButton.querySelector('.burger-icon'); // Get the burger icon container
+        const mobileMenuLinks = mobileMenu.querySelectorAll('#mobile-nav-menu li a'); // Select actual anchor tags
 
-        // Open mobile menu
+        // Toggle mobile menu visibility and burger icon animation
         mobileMenuButton.addEventListener('click', () => {
-            // Remove translate-y-full to slide in from the bottom
-            mobileMenu.classList.remove('translate-y-full');
-            // Add translate-y-0 to ensure it's at its natural position (bottom: 0)
-            mobileMenu.classList.add('translate-y-0');
-        });
+            const isOpen = mobileMenu.classList.contains('translate-y-0');
 
-        // Close mobile menu
-        closeMobileMenuButton.addEventListener('click', () => {
-            // Remove translate-y-0 to slide out to the bottom
-            mobileMenu.classList.remove('translate-y-0');
-            // Add translate-y-full to hide it off-screen
-            mobileMenu.classList.add('translate-y-full');
+            if (isOpen) {
+                // Closing menu
+                mobileMenu.classList.remove('translate-y-0');
+                mobileMenu.classList.add('translate-y-full');
+                burgerIcon.classList.remove('open');
+                // Hide menu items immediately when closing
+                mobileMenuLinks.forEach(item => {
+                    item.classList.remove('section-visible');
+                    item.classList.add('section-hidden');
+                });
+            } else {
+                // Opening menu
+                mobileMenu.classList.remove('translate-y-full');
+                mobileMenu.classList.add('translate-y-0');
+                burgerIcon.classList.add('open');
+                // Animate menu items with staggered delay when opening
+                mobileMenuLinks.forEach((item, index) => {
+                    item.classList.remove('section-hidden'); // Ensure hidden state is removed
+                    item.style.animationDelay = `${0.15 * index}s`; // Increased staggered delay
+                    item.classList.add('section-visible'); // Trigger animation
+                });
+            }
         });
 
         // Close mobile menu when a link is clicked (for smooth scroll)
         mobileMenuLinks.forEach(link => {
             link.addEventListener('click', () => {
-                // Remove translate-y-0 to slide out to the bottom
-                mobileMenu.classList.remove('translate-y-0');
-                // Add translate-y-full to hide it off-screen
-                mobileMenu.classList.add('translate-y-full');
+                mobileMenu.classList.add('translate-y-full'); // Hide it off-screen
+                mobileMenu.classList.remove('translate-y-0'); // Ensure it's not in visible state
+                burgerIcon.classList.remove('open'); // Reset burger icon to default state
+                // Hide menu items immediately when closing via link click
+                mobileMenuLinks.forEach(item => {
+                    item.classList.remove('section-visible');
+                    item.classList.add('section-hidden');
+                });
             });
         });
+
+        // JavaScript for Copy Email functionality
+        const copyEmailButton = document.getElementById('copy-email-button');
+        const emailAddressElement = document.getElementById('email-address');
+        const messageBox = document.getElementById('message-box');
+
+        if (copyEmailButton && emailAddressElement && messageBox) {
+            copyEmailButton.addEventListener('click', () => {
+                const emailText = emailAddressElement.textContent;
+                // Use document.execCommand('copy') for better compatibility in iframes
+                const textArea = document.createElement('textarea');
+                textArea.value = emailText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showMessage("Email berhasil disalin!");
+                } catch (err) {
+                    console.error('Gagal menyalin teks: ', err);
+                    showMessage("Gagal menyalin email.");
+                }
+                document.body.removeChild(textArea);
+            });
+        }
+
+        // Function to show a temporary message
+        function showMessage(msg) {
+            messageBox.textContent = msg;
+            messageBox.classList.add('show');
+            setTimeout(() => {
+                messageBox.classList.remove('show');
+            }, 2000); // Message disappears after 2 seconds
+        }
     </script>
 </body>
 </html>
